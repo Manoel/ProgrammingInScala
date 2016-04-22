@@ -103,6 +103,21 @@ object MatrixOperations {
     result
   }
   
+  def booleanPower(A: Array[Array[Int]], n: Int): Array[Array[Int]] = {
+    require(isSquare(A))
+    require(isZeroOne(A))
+    require(n >= 0)
+    
+    var result = Array.ofDim[Int](A.length, A.length)
+    for ( i <- 0 until A.length) 
+      result(i)(i) = 1
+      
+    for (i <- 1 to n)
+      result = booleanProduct(A, result)
+    
+    result
+  }
+  
   private def isSquare(A: Array[Array[Int]]): Boolean = {
     require(A != null)
     require(A.length > 0)
@@ -179,6 +194,12 @@ object MatrixOperations {
       Array(0, 1, 0)
     )
     
+    val otherZeroOne = Array(
+      Array(0, 0, 1),
+      Array(1, 0, 0),
+      Array(1, 1, 0)
+    )
+    
     println("A x B =")
     println(product(A, B).deep.mkString("\n"))
     println("C^0 = ")
@@ -193,6 +214,12 @@ object MatrixOperations {
     println(join(sym, zeroOne).deep.mkString("\n"))
     println("Meet of sym and zeroOne")
     println(meet(sym, zeroOne).deep.mkString("\n"))
+    println("otherZeroOne^2")
+    println(booleanPower(otherZeroOne, 2).deep.mkString("\n"))
+    println("otherZeroOne^3")
+    println(booleanPower(otherZeroOne, 3).deep.mkString("\n"))
+    println("otherZeroOne^4")
+    println(booleanPower(otherZeroOne, 4).deep.mkString("\n"))
   }
 
 }
