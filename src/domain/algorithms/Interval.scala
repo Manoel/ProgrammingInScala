@@ -17,7 +17,7 @@ case class Interval(val start: Int, val end: Int) extends Ordered[Interval] {
       largest = this
     }
       
-    largest.start <= smallest.end
+    largest.start < smallest.end
   }
   
 }

@@ -12,8 +12,6 @@ object TalksScheduler {
 
     val talksSorted = talks.sorted
     
-    println(talksSorted)
-
     result += talksSorted(0)
 
     for (i <- 1 until talksSorted.length) {
