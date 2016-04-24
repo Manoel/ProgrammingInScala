@@ -1,8 +1,33 @@
 package domain.solution.bits
 
 import scala.collection.JavaConversions._
+import scala.collection.mutable.ListBuffer
 
 object Solution {
+  
+  def minus(A: Array[Int]): Array[Int] = {
+    val X = sum(A)
+    if (X == 0)
+      Array[Int]()
+    else {
+      var q = (-X) / (-2)
+      var r = (-X) % (-2)
+      
+      val result = ListBuffer[Int](r)
+      
+      while (q != 0) {
+    	  r = q % (-2)
+        q = q / (-2)
+        if (r < 0) {
+          q += 1
+          r += 2
+        }
+        result += r
+      }
+      
+      result.toArray
+    }
+  }
   
   def solution(A: Array[Int]): Array[Int] = {
     val X = sum(A)
@@ -56,13 +81,28 @@ object Solution {
   }
 
   def main(args: Array[String]) {
-    println("output: " + solution(Array(1, 0, 0, 1, 1, 1)).deep.mkString(" "))
-    println("output: " + solution(Array(1, 0, 0, 1, 1)).deep.mkString(" "))
-    println("output: " + solution(Array()).deep.mkString(" "))
-    println("output: " + solution(null).deep.mkString(" "))
-    println("output: " + solution(Array(0, 0)).deep.mkString(" "))
-    println("output: " + solution(Array(0, 0, 0, 0, 1, 1)).deep.mkString(" "))
-    println("output: " + solution(Array(0, 0, 0, 0, 1)).deep.mkString(" "))
+//    println("output: " + solution(Array(1, 0, 0, 1, 1, 1)).deep.mkString(" "))
+//    println("output: " + solution(Array(1, 0, 0, 1, 1)).deep.mkString(" "))
+//    println("output: " + solution(Array()).deep.mkString(" "))
+//    println("output: " + solution(null).deep.mkString(" "))
+//    println("output: " + solution(Array(0, 0)).deep.mkString(" "))
+    
+    var input = Array(0, 0, 0, 0, 1, 1)
+    var output = solution(input)
+    println("input: " + sum(input) + " output: sum = " + sum(output) + " array: " + output.deep.mkString(" "))
+    
+    input = Array(0, 0, 0, 0, 1)
+    output = solution(input)
+    println("input: " + sum(input) + " output: sum = " + sum(output) + " array: " + output.deep.mkString(" "))
+    
+    input = Array(0, 0, 0, 0, 1, 1)
+    output = minus(input)
+    println("input: " + sum(input) + " output: sum = " + sum(output) + " array: " + output.deep.mkString(" "))
+    
+    input = Array(0, 0, 0, 0, 1)
+    output = minus(input)
+    println("input: " + sum(input) + " output: sum = " + sum(output) + " array: " + output.deep.mkString(" "))
+    
   }
 
 }
