@@ -5,6 +5,8 @@ import scala.collection.mutable.ListBuffer
 import scala.math._
 
 object Solution {
+  
+  val a = Array.ofDim[Int](5)
 
   val dim = 15
 
@@ -337,6 +339,7 @@ object Solution {
     println(param)
     println("BFS = " + result_bfs + " " + " Result formulee = " + result_formulee + " " + (result_bfs == result_formulee))
 
+    println(a.deep.mkString(" "))
   }
 
 }
