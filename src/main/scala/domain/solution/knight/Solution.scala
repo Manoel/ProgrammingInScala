@@ -34,8 +34,8 @@ object Solution {
 
   def solution(A: Int, B: Int): Int = {
     // use abs because it is symmetric
-    var a = abs(A)
-    var b = abs(B)
+    var a = max(abs(A), abs(B))
+    var b = min(abs(A), abs(B))
 
     val specialCase = getSpecialCase
 
@@ -46,14 +46,14 @@ object Solution {
   }
 
   private def generalCase(node: Node): Int = {
-    // diagonal 1: starts at (3,2) x = y + 1 
-    // diagonal 2: starts at (2,3) x = y - 1
-    // diagonal 3: starts at (5,3) x = y + 2
     // diagonal 4: starts at (4,4) x = y
-    // diagonal 5: starts at (3,5) x = y - 2
-
-    var x = node.x
-    var y = node.y
+    // diagonal 1: starts at (3,2) x = y + 1 3
+    // diagonal 3: starts at (5,3) x = y + 2 4
+    // diagonal 1: starts at (7,4) x = y + 3 5
+    // diagonal 1: starts at (9,5) x = y + 4 6
+    
+    val x = node.x
+    val y = node.y
     val r = 2
     var n = 0
     var a_1 = 0
@@ -61,21 +61,15 @@ object Solution {
     var result = 0
 
     if (isDiagonal(x, y)) {
-      if (x == y + 1) {
-        n = (x - 3) / 3 + 1
-        a_1 = 3
-      } else if (x == y - 1) {
-        n = (x - 2) / 3 + 1
-        a_1 = 3
-      } else if (x == y + 2) {
-        n = (x - 5) / 3 + 1
-        a_1 = 4
-      } else if (x == y) {
+      if (x == y) {
         n = (x - 4) / 3 + 1
         a_1 = 4
-      } else if (x == y - 2) {
-        n = (x - 3) / 3 + 1
-        a_1 = 4
+      } else {
+        val num_terms = x - y
+        val jump = 2
+        val start = 3 + (num_terms - 1) * jump
+        n = (x - start) / 3 + 1
+        a_1 = num_terms + 2
       }
 
       a_n = a_1 + (n - 1) * r
@@ -91,10 +85,6 @@ object Solution {
       // (10, 5) : starts at 5  general case
       // (12, 6) : starts at 6  general case
       // ...
-
-      // because it is symmetric, considering when x > y
-      x = max(node.x, node.y)
-      y = min(node.x, node.y)
 
       var x_1 = 0
 
@@ -114,14 +104,31 @@ object Solution {
 
       a_n = a_1 + (n - 1) * r
 
-      result = a_n + x - (n * 4)
+      result = a_n + x - (x_1 + (n - 1) * 4)
     }
 
     result
 
   }
 
-  private def isDiagonal(x: Int, y: Int): Boolean = x == y + 1 || x == y - 1 || x == y + 2 || x == y || x == y - 2
+  private def isDiagonal(x: Int, y: Int): Boolean = {
+    // diagonal 1: starts at (4,4) x = y (special case)
+    // diagonal 2: starts at (3,2) x = y + 1 
+    // diagonal 3: starts at (5,3) x = y + 2
+    // diagonal 4: starts at (7,4) x = y + 3
+    // diagonal 5: starts at (9,5) x = y + 4
+    // ...
+    
+    if (x == y && x >= 4)
+      true
+    else {
+      val n = x - y
+      var r = 2
+      val a_n = 3 + (n - 1) * r
+      
+      x >= a_n
+    }
+  }
 
   private def getSpecialCase: Map[Node, Int] = {
     val orign = Node(0, 0)
