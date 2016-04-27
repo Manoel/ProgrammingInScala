@@ -9,14 +9,15 @@ object Solution {
         var max = 0
         
         for (op <- A) {
-            if (op < N) {
-                if (counters(op-1) >= maxUpdateAll)
-                    counters(op-1) += 1
+            if (op <= N) {
+                val index = op - 1
+                if (counters(index) >= maxUpdateAll)
+                    counters(index) += 1
                 else
-                    counters(op-1) = maxUpdateAll + 1
+                    counters(index) = maxUpdateAll + 1
                 
-                if (counters(op-1) > max)
-                    max = counters(op-1)
+                if (counters(index) > max)
+                    max = counters(index)
                 
             } else {
                 maxUpdateAll = max
