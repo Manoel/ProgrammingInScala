@@ -20,7 +20,7 @@ object BaseExpansion {
       result += r
     }
 
-    result.reverse.toList
+    result.toList
   }
 
   def modulus(a: Int, b: Int): (Int, Int) = {
