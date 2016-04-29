@@ -33,6 +33,23 @@ public class Solution {
 		
 		return true;
 	}
+	
+	private static void turnRodOneGood(int[] discs) {
+		
+	}
+	
+	private static int getSmallestDisc(int[] discs, int rod) {
+		for (int i = 0; i < discs.length; i++) {
+			if (discs[i] == rod)
+				return i;
+		}
+		return -1;
+	}
+	
+	private static boolean canMove(int[] discs, int diameter, int rod) {
+		int smallest = getSmallestDisc(discs, rod);
+		return diameter < smallest || smallest == -1;
+	}
 
 	private void minimumMoves() {
 		// can move disc d to rod r?
