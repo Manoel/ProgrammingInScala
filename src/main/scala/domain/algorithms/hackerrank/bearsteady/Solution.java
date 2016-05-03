@@ -7,114 +7,172 @@ import java.math.*;
 import java.util.regex.*;
 
 public class Solution {
+
+    public static void main(String[] args) {  
+    	
+    	for (int i = 0; i < 11; i++) 
+    		System.out.println(UUID.randomUUID());
+    	
+        Scanner input = new Scanner(System.in);
+        
+        input.nextInt();
+                      
+        String s = input.next();
+        
+        input.close();
+        
+        System.out.println(minimumToBeSteady(s));
+        
+        
+    }
     
-    public static void main(String[] args) throws Exception{
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        
-        Integer n = Integer.parseInt(br.readLine().trim());
-        String s = br.readLine().trim();
-        
-        br.close();
+    public static int minimumToBeSteady(String s) {
+        int n = s.length();
         
         int steady = n / 4;
         
-        // A:0 , C:1, G:2, T: 3
-        Map<Character, Integer> indexes = new HashMap<Character, Integer>();
-        indexes.put('A', 0);
-        indexes.put('C', 1);
-        indexes.put('G', 2);
-        indexes.put('T', 3);
+        boolean alreadySteady = true;
         
-        Map<Integer, Character> letters = new HashMap<Integer, Character>();
-        letters.put(0, 'A');
-        letters.put(1, 'C');
-        letters.put(2, 'G');
-        letters.put(3, 'T');
-        
-        int[] ocurrences = new int[4];
+        Map<Character, Integer> count = new HashMap<Character, Integer>();
         
         for (char c: s.toCharArray()) {
-            ocurrences[indexes.get(c)]++;
+            if (!count.containsKey(c))
+                count.put(c, 0);
+            count.put(c, count.get(c) + 1);
+            
+            if (alreadySteady && count.get(c) > steady)
+                alreadySteady = false;
         }
         
-        int index = getIndexMaxOcurrence(ocurrences);
-        
-        int result = 0;
-        
-        if (ocurrences[index] > steady) {
-            int ocurrence = ocurrences[index];
+        if (alreadySteady)
+           return 0;
+        else {
+            String candidate = candidate(count, steady);
             
-            char c = letters.get(index);
-            
-            int shouldBe = ocurrence - steady;
-            
-            int place = findPlace(s, c, shouldBe);
-            
-            while (place == -1) {
-                place = findPlace(s, c, --shouldBe);
-            }
-            
-            int count = 0;
-            
-            while (count < shouldBe) {
-                int minIndex = getIndexMinOcurrence(ocurrences);
-                result++;
-                count++;
-                ocurrences[minIndex]++;
-                ocurrences[index]--;
-                place++;
-            }
-            
-            index = getIndexMinOcurrence(ocurrences);
-            
-            while (ocurrences[index] < steady) {
-                char nextC = s.charAt(place);    
+            if (search(s, candidate))
+                return candidate.length();
+            else {
+                List<Character> lessThanOrEqual = lessThanOrEqualToSteady(count, steady);
                 
-                if (ocurrences[indexes.get(nextC)] > steady) {
-                    int indexMin = getIndexMinOcurrence(ocurrences);
-                    ocurrences[indexMin]++;
-                    ocurrences[indexes.get(nextC)]--;
+                List<String> toAdd = new ArrayList<String>();
+                toAdd.add("");
+                
+                for (int i = candidate.length(); i < s.length() ; i++) {
+                    toAdd = add(lessThanOrEqual, toAdd);
+                    for (String a: toAdd) {
+                        String c = candidate + a;
+                        if (search(s, c)) {
+                            return c.length();
+                        }
+                    }                                     
                 }
                 
-                result++;
-                place++;
-                index = getIndexMinOcurrence(ocurrences);
+                return s.length();
+            }
+        }
+    }
+    
+    public static List<String> add(List<Character> lessThanOrEqual, List<String> toAdd) {
+        List<String> result = new ArrayList<String>();
+        
+        for (String s: toAdd) {
+            for (char a: lessThanOrEqual) {
+                result.add(s + (a+""));
             }
         }
         
-        System.out.println(result);
+        return result;        
+    }
+    
+    public static List<Character> lessThanOrEqualToSteady(Map<Character, Integer> count, int steady) {
+        List<Character> result = new ArrayList<Character>();
         
+        for (Map.Entry<Character, Integer> e: count.entrySet()) {
+            if (e.getValue() <= steady) 
+                result.add(e.getKey());
+        }
+        
+        return result;
     }
     
-    private static int findPlace(String s, char c, int ocurrence) {
-        char[] array = new char[ocurrence];
-        for (int i = 0; i < ocurrence; i++)
-            array[i] = c;
-        String find = new String(array);
-        return s.indexOf(find);
-    }
-    
-    private static int getIndexMinOcurrence(int[] ocurrences) {
-        int min = Integer.MAX_VALUE;
-        int result = 0;
-        for (int i = 0; i < 4; i++)  {
-            if (ocurrences[i] < min) {
-                min = ocurrences[i];
-                result = i;
+    public static String candidate(Map<Character, Integer> count, int steady) {
+        StringBuilder s = new StringBuilder();
+        
+        for (Map.Entry<Character, Integer> e: count.entrySet()) {
+            if (e.getValue() > steady) {
+                for (int i = 0; i < e.getValue() - steady; i++)
+                    s.append(e.getKey());
             }
         }
-        return result;        
+        
+        return s.toString();
     }
     
-    private static int getIndexMaxOcurrence(int[] ocurrences) {
-        int max = 0;
-        int result = 0;
-        for (int i = 0; i < 4; i++)  {
-            if (ocurrences[i] > max) {
-                max = ocurrences[i];
-                result = i;
-            }
-        }
-        return result;        
-    }
+    public static boolean search(String text, String word) {
+	    if (text.length() < word.length())
+	        return false;
+	   
+	    Map<Character, Integer> countInWord = new HashMap<Character, Integer>();
+	    
+	    int hashWord = 0;
+	    
+	    for (char c: word.toCharArray()) {
+	        if (!countInWord.containsKey(c)) {
+	            countInWord.put(c, 0);
+	        }
+	        countInWord.put(c, countInWord.get(c) + 1);
+	        hashWord += c;
+	    }
+	    
+	    Map<Character, Integer> countInText = new HashMap<Character, Integer>();
+	    
+	    int hashText = 0;
+	    
+	    for (int i = 0; i < word.length(); i++) {
+	        char c = text.charAt(i);
+	        if (!countInText.containsKey(c)) {
+	            countInText.put(c, 0);
+	        }
+	        countInText.put(c, countInText.get(c) + 1);
+	        hashText += c;
+	    }
+	    
+	    if (hashText == hashWord && isEquals(countInText, countInWord)) 
+            return true;
+	    
+	    for (int i = 1; i <= text.length() - word.length(); i++) {
+	        char previous = text.charAt(i - 1);
+	        
+	        char next = text.charAt(i + word.length() - 1);
+	        
+	        hashText += (next - previous);
+	        
+	        if (countInText.get(previous) == 1)
+	            countInText.remove(previous);
+	        else 
+	           countInText.put(previous, countInText.get(previous) - 1);
+	       
+	        if (!countInText.containsKey(next)) 
+	            countInText.put(next, 0);
+	            
+	        countInText.put(next, countInText.get(next) + 1);
+	        
+	        if (hashText == hashWord && isEquals(countInText, countInWord))
+	            return true;
+	    }
+	    
+	    return false;
+	}
+	
+	private static boolean isEquals(Map<Character, Integer> countInText, Map<Character, Integer> countInWord) {
+	    for (Map.Entry<Character, Integer> e: countInText.entrySet()) {
+	        if (!countInWord.containsKey(e.getKey()))
+	            return false;
+	        int textValue = e.getValue();
+	        int wordValue = countInWord.get(e.getKey());
+	        if (textValue != wordValue) 
+	            return false;
+	    }
+	    return true;
+	}
 }
