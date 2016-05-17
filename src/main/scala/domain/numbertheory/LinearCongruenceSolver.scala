@@ -7,19 +7,24 @@ object LinearCongruenceSolver {
    * prime moduli, find the simultaneous solution of these congruences
    * modulo the product of these moduli.
    */
-  def solve(congruences: List[LinearCongruence]): Int = {
+  def solve(congruences: List[LinearCongruence]): Long = {
     val product = congruences.map { c => c.modulo }.reduce(_ * _)
-
+    
     val sum = congruences.map { c => (c.a, product / c.modulo, InverseModulo.inverse(product / c.modulo, c.modulo)) }
-      .map { t => t._1 * t._2 * t._3 }.reduce(_ + _)
+      .map { t => t._1.toLong * t._2.toLong * t._3.toLong }.reduce(_ + _)
 
     sum % product
   }
 
   def main(args: Array[String]): Unit = {
-    val congruences = List(LinearCongruence(2, 3), LinearCongruence(3, 5), LinearCongruence(2, 7))
+    var congruences = List(LinearCongruence(2, 3), LinearCongruence(3, 5), LinearCongruence(2, 7))
 
     println(solve(congruences))
+    
+    congruences = List(LinearCongruence(65, 99), LinearCongruence(2, 98), LinearCongruence(51, 97), LinearCongruence(10, 95))
+
+    println(solve(congruences))
+    
   }
 
 }
