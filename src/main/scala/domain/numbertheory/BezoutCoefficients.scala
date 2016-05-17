@@ -21,6 +21,12 @@ object BezoutCoefficients {
    */
   def solve(a: Int, b: Int): (Int, Int, Int) = {
     require(a > 0 && b > 0)
+    
+    s_0 = 1
+    s_1 = 0
+    t_0 = 0
+    t_1 = 1
+    
     val g = gcd(max(a, b), min(a, b))
     (g, s_0, t_0)
   }
