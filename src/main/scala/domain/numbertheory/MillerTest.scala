@@ -8,19 +8,19 @@ object MillerTest {
   /**
    * s is a nonnegative integer
    */
-  var s = 697
+  var s = 4
 
   /**
    * t is an odd positive integer
    */
-  val t = 13
+  val t = BigInt("231916681452058459913938119644422010983954668505838345984479056394668975009054953727852640279939921902922733015695847889131865692624867609496734092037330401224974706036439624474339562209779062172031")
 
   var n = generateN()
 
-  def generateN(): BigInt = (BigInt(2).pow(s) * BigInt(t)) + BigInt(1)
+  def generateN(): BigInt = (BigInt(2).pow(s) * t) + BigInt(1)
 
-  def generateB(): BigInt = BigInt.apply(s + log2(t) + 1, Random)
-
+  def generateB(): BigInt = BigInt.apply(n.bitCount, Random)
+  
   def test(): Boolean = {
     val b = generateB()
     val b_to_t_mod_n = modExp(b, t, n)
@@ -52,7 +52,11 @@ object MillerTest {
   }
   
   def probablePrime(): BigInt = {
+    println("s: " + s)
+    println("n: " + n)
     while (!isProbablePrime()) {
+      println("s: " + s)
+      println("n: " + n)
       s += 1
       n = generateN()
     }
@@ -125,9 +129,39 @@ object MillerTest {
   
 
   private def log2(x: Int): Int = (scala.math.log(x) / scala.math.log(2)).intValue()
-
+  
   def main(args: Array[String]) {
-    println(twoProbablePrimes())
+    val prime = BigInt.probablePrime(660, Random)
+    
+    val n = prime - 1
+   
+    println(prime)
+    
+    println(n)
+        
+    var bitCount = n.bitCount
+    var m = BigInt(2).pow(bitCount)
+    var r = n % m 
+  
+    println(bitCount)
+    println(r)
+    
+    while (m > n || r != 0) {
+      bitCount -= 1
+      m = BigInt(2).pow(bitCount)
+      r = n % m
+      
+      println(bitCount)
+      println(r)
+    
+    }
+    println(bitCount)
+    println(r)
+    println(n / m)
+    
+    println(isProbablePrime())
+    println(this.n)  
+        
   }
 
 }
