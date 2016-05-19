@@ -1,21 +1,17 @@
 package domain.numbertheory
 
-object EncryptDecryptMessage {
+class EncryptDecryptMessage extends Cipher {
 
   private def executeOp(message: String, k: Int, op:(Int, Int) => Int): String = {
     require(message != null)
     require(!message.isEmpty())
     require(k < 26)
 
-    val M = message.trim().toUpperCase();
+    val M = message.trim().toUpperCase()
 
-    val chars = scala.collection.mutable.Map[Int, Char]()
-    
-    (0 to 25).asInstanceOf[Range.Inclusive].foreach { x => chars += (x -> ('A' + x).asInstanceOf[Char]) }
+    val s = M.toCharArray().map { x => (charsMap( op(charsMap(x - 'A'), k) % 26 ) ) }
 
-    val s = M.toCharArray().map { x => (( op(chars(x - 'A'), k) ) % 26).asInstanceOf[Int] }
-    println(s.deep.mkString(" "))
-    new String("A")
+    new String(s)
   }
   
   def encrypt(message: String, k: Int): String = {
@@ -26,13 +22,19 @@ object EncryptDecryptMessage {
     executeOp(message, k, _-_)
   }
 
+}
+
+object EncryptDecryptMessage {
+  
   def main(args: Array[String]): Unit = {
+    val encDec = new EncryptDecryptMessage
+    
     val message = "AMOR"
-    val encrypted = encrypt(message, 3)
-    val decrypted = decrypt(encrypted, 3)
+    val encrypted = encDec.encrypt(message, 3)
+    val decrypted = encDec.decrypt(encrypted, 3)
     
     println(encrypted)
     println(decrypted)
   }
-
+  
 }
