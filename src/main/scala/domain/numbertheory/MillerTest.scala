@@ -20,7 +20,7 @@ object MillerTest {
   def generateN(): BigInt = (BigInt(2).pow(s) * t) + BigInt(1)
 
   def generateB(): BigInt = BigInt.apply(n.bitCount, Random)
-  
+
   def test(): Boolean = {
     val b = generateB()
     val b_to_t_mod_n = modExp(b, t, n)
@@ -33,16 +33,34 @@ object MillerTest {
       while (!passes && j < s) {
         val exp = BigInt(2).pow(j) * t
         val b_to_2_to_j_times_t_mod_n = modExp(b, exp, n)
-        
+
         if (b_to_2_to_j_times_t_mod_n == -1 || b_to_2_to_j_times_t_mod_n - n == -1)
           passes = true
-          
+
         j += 1
       }
-      passes      
+      passes
     }
   }
-  
+
+  /**
+   * The first element is s and the second is t: n - 1 = (2^s)*t
+   */
+  def generateMillerVariables(probablePrime: BigInt): (Int, BigInt) = {
+    val n = probablePrime - 1
+
+    var bitCount = n.bitCount
+    var m = BigInt(2).pow(bitCount)
+    var r = n % m
+
+    while (m > n || r != 0) {
+      bitCount -= 1
+      m = BigInt(2).pow(bitCount)
+      r = n % m
+    }
+    (bitCount, n / m)
+  }
+
   def isProbablePrime(): Boolean = {
     var k = 30
     while (test() && k > 0) {
@@ -50,7 +68,7 @@ object MillerTest {
     }
     k == 0
   }
-  
+
   def probablePrime(): BigInt = {
     println("s: " + s)
     println("n: " + n)
@@ -62,7 +80,7 @@ object MillerTest {
     }
     n
   }
-  
+
   def twoProbablePrimes(): (BigInt, Int, BigInt, Int) = {
     val p1 = probablePrime()
     val s1 = s
@@ -72,7 +90,7 @@ object MillerTest {
     val s2 = s
     (p1, s1, p2, s2)
   }
-  
+
   private def baseExpansion(n: BigInt, b: Int): List[Int] = {
     require(n > 1)
     require(b > 1)
@@ -126,42 +144,15 @@ object MillerTest {
 
     r
   }
-  
 
   private def log2(x: Int): Int = (scala.math.log(x) / scala.math.log(2)).intValue()
-  
+
   def main(args: Array[String]) {
-    val prime = BigInt.probablePrime(660, Random)
+    val p = BigInt.probablePrime(660, Random)
+    val q = BigInt.probablePrime(660, Random)
     
-    val n = prime - 1
-   
-    println(prime)
-    
-    println(n)
-        
-    var bitCount = n.bitCount
-    var m = BigInt(2).pow(bitCount)
-    var r = n % m 
-  
-    println(bitCount)
-    println(r)
-    
-    while (m > n || r != 0) {
-      bitCount -= 1
-      m = BigInt(2).pow(bitCount)
-      r = n % m
-      
-      println(bitCount)
-      println(r)
-    
-    }
-    println(bitCount)
-    println(r)
-    println(n / m)
-    
-    println(isProbablePrime())
-    println(this.n)  
-        
+    println(p)
+    println(q)
   }
 
 }

@@ -39,11 +39,11 @@ object Combination {
    * will be given. An r-combination can be represented by a sequence containing the
    * elements in the subset in increasing order. The r-combinations can be listed using
    * lexicographic order on these sequences. In this lexicographic ordering, the first
-   * r-combination is {1, 2, . . . , r − 1, r} and the last r-combination is
-   * {n − r + 1, n − r + 2, . . . , n − 1, n}. The next r-combination after a1a2...ar 
-   * can be obtained in the following way: First, locate the last element a i in the
-   * sequence such that a i = n − r + i. Then, replace ai with ai + 1 and aj with 
-   * ai + j − i + 1, for j = i + 1, i + 2, ..., r. It is left for the reader to show 
+   * r-combination is {1, 2, . . . , r - 1, r} and the last r-combination is
+   * {n - r + 1, n - r + 2, . . . , n - 1, n}. The next r-combination after a1a2...ar 
+   * can be obtained in the following way: First, locate the last element ai in the
+   * sequence such that ai != n - r + i. Then, replace ai with ai + 1 and aj with 
+   * ai + j - i + 1, for j = i + 1, i + 2, ..., r. It is left for the reader to show 
    * that this produces the next larger r-combination in lexicographic order. 
    * 
    * Explanation:
