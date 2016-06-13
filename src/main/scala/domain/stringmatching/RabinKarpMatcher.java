@@ -56,7 +56,7 @@ public class RabinKarpMatcher {
 			if (s < n - m) {
 				t = (d * (t - Integer.parseInt("" + text.charAt(s)) * h) + Integer
 						.parseInt("" + text.charAt(s + m))) % q;
-				if ( t < 0) {
+				if (t < 0) {
 					t += q;
 				}
 			}
@@ -64,6 +64,26 @@ public class RabinKarpMatcher {
 
 		return validShifts;
 
+	}
+
+	public static List<Matching> match(String text, List<String> patterns,
+			int d, int q) {
+
+		List<Matching> matchings = new ArrayList<>();
+
+		for (String pattern : patterns) {
+
+			try {
+
+				List<Integer> validShifts = match(text, pattern, d, q);
+
+				matchings.add(new Matching(pattern, validShifts));
+
+			} catch (Exception e) {}
+
+		}
+
+		return matchings;
 	}
 
 	public static void main(String[] args) {
