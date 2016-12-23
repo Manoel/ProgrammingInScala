@@ -10,17 +10,8 @@ public class Solution {
 	static Map<Integer, String> subsB;
 
     public static void main(String[] args) {
-        Scanner input = new Scanner(System.in);
         
-        String a = input.next();
-        String b = input.next();
-        
-        System.out.println("a=" + a);
-        System.out.println("b=" + b);
-        System.out.println(longestCommonChild(a, b));
-        
-        input.close();
-            
+    	System.out.println(-3 % 7);
     }
     
     private static Map<Integer, String> createSubs(String s) {

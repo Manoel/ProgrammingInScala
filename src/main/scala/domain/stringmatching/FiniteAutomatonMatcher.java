@@ -12,9 +12,9 @@ public class FiniteAutomatonMatcher {
 		String pattern = "31415";
 		String text = "235902314152673992131415";
 		
-		Transition transition = computeTransitionFunction(pattern, new char[] {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'});
-
-		System.out.println(match(text, pattern.length(), transition));
+//		Transition transition = computeTransitionFunction(pattern, new char[] {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'});
+//
+//		System.out.println(match(text, pattern.length(), transition));
 	}
 
 	public static List<Integer> match(String text, int m,
